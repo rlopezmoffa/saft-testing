@@ -1,0 +1,71 @@
+<div class="page-header">
+  <%= link_to empresas_path, :class => 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-list-alt"></span>
+    Atras
+  <% end %>
+  <%= link_to edit_empresa_path(@empresa), :class => 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-pencil"></span>
+    Editar
+  <% end %>
+  <h3><%= @empresa.razon_social %></h3>
+</div>
+
+<dl class="dl-horizontal"> 
+
+  <dt>Direccion:</dt>
+  <dd><%= @empresa.direccion %></dd>
+
+  <dt>Telefonos:</dt>
+  <dd><%= @empresa.telefonos %></dd>
+
+  <dt>Contacto:</dt>
+  <dd><%= @empresa.contacto %></dd>
+
+  <dt>Fecha ingreso:</dt>
+  <dd><%= @empresa.fecha_ingreso.strftime("%d/%m/%Y") %></dd>
+
+  <dt>Numero BPS:</dt>
+  <dd><%= @empresa.bps_numero %></dd>
+
+  <dt>Digito BPS:</dt>
+  <dd><%= @empresa.bps_digito %></dd>
+
+  <dt>Socio Patronal:</dt>
+  <dd><%= @empresa.pat_socio %></dd>
+
+  <dt>Rubros:</dt>
+  <dd><%= @empresa.rubros %></dd>
+
+  <dt>Estado:</dt>
+  <dd><%= @empresa.get_estado %></dd>
+
+</dl>
+
+<h4>Choferes</h4>
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>       
+        <th>Nombre</th>       
+        <th>Fecha alta</th>
+        <th>Fecha baja</th>        
+        <th>Fecha alta bps</th>       
+        <th>Porc comision</th>             
+        <th></th>
+        <th></th>      
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= content_tag_for(:tr, @empresa_choferes) do |empresa_chofer| %>              
+        <td><%= empresa_chofer.get_nombre_chofer %></td>      
+        <td><%= empresa_chofer.get_fecha_alta_editada %></td>
+        <td><%= empresa_chofer.get_fecha_baja_editada %></td>                                 
+        <td><%= empresa_chofer.get_fecha_alta_bps_editada %></td>            
+        <td><%= empresa_chofer.porc_comision %></td>                    
+        <td><%= link_to 'Ver', empresa_chofer %></td>
+        <td><%= link_to 'Editar', edit_empresa_chofer_path(empresa_chofer, :id_empresa => @empresa.id) %></td>           
+      <% end %>
+    </tbody>
+  </table>
+</div>

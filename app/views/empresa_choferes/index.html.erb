@@ -1,0 +1,59 @@
+<div class="page-header">
+  <%= link_to new_empresa_chofer_path, :class => 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-plus"></span>
+    New Empresa chofer
+  <% end %>
+  <h1>Listing empresa_choferes</h1>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+            <th>Id empresa</th>
+            <th>Id chofer</th>
+            <th>Estado</th>
+            <th>Fecha alta</th>
+            <th>Fecha baja</th>
+            <th>Turno</th>
+            <th>Hora entrada</th>
+            <th>Hora salida</th>
+            <th>Descanso</th>
+            <th>Fecha alta bps</th>
+            <th>Charla seguro</th>
+            <th>Carne seguro</th>
+            <th>Porc comision</th>
+            <th>Porc aporte</th>
+            <th>Fijo aporte</th>
+            <th>Observaciones</th>
+            <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= content_tag_for(:tr, @empresa_choferes) do |empresa_chofer| %>
+            <td><%= empresa_chofer.id_empresa %></td>
+            <td><%= empresa_chofer.id_chofer %></td>
+            <td><%= empresa_chofer.estado %></td>
+            <td><%= empresa_chofer.fecha_alta %></td>
+            <td><%= empresa_chofer.fecha_baja %></td>
+            <td><%= empresa_chofer.turno %></td>
+            <td><%= empresa_chofer.hora_entrada %></td>
+            <td><%= empresa_chofer.hora_salida %></td>
+            <td><%= empresa_chofer.descanso %></td>
+            <td><%= empresa_chofer.fecha_alta_bps %></td>
+            <td><%= empresa_chofer.charla_seguro %></td>
+            <td><%= empresa_chofer.carne_seguro %></td>
+            <td><%= empresa_chofer.porc_comision %></td>
+            <td><%= empresa_chofer.porc_aporte %></td>
+            <td><%= empresa_chofer.fijo_aporte %></td>
+            <td><%= empresa_chofer.observaciones %></td>
+            <td><%= link_to 'Ver', empresa_chofer %></td>
+        <td><%= link_to 'Editar', edit_empresa_chofer_path(empresa_chofer) %></td>
+       
+      <% end %>
+    </tbody>
+  </table>
+</div>

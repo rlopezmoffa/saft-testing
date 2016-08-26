@@ -1,0 +1,32 @@
+<%= form_for(@matricula, :html => { :class => "form-horizontal", :role => "form" }) do |f| %>
+  <% if @matricula.errors.any? %>
+    <div class="alert alert-danger alert-dismissable" role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      <h4><%= pluralize(@matricula.errors.count, "error") %> prohibited this matricula from being saved:</h4>
+
+      <ul>
+      <% @matricula.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :codigo, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :codigo, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :empresa_id, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.number_field :empresa_id, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <%= f.submit :class => "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

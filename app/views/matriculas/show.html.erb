@@ -1,0 +1,20 @@
+<div class="page-header">
+  <%= link_to matriculas_path, :class => 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-list-alt"></span>
+    Back
+  <% end %>
+  <%= link_to edit_matricula_path(@matricula), :class => 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-pencil"></span>
+    Edit
+  <% end %>
+  <h1>Show matricula</h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>Codigo:</dt>
+  <dd><%= @matricula.codigo %></dd>
+
+  <dt>Empresa:</dt>
+  <dd><%= @matricula.empresa_id %></dd>
+
+</dl>

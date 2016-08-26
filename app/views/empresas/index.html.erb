@@ -1,0 +1,46 @@
+<div class="page-header">
+  <%= link_to new_empresa_path, :class => 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-plus"></span>
+    Agregar Empresa
+  <% end %>
+  <h1>Empresas</h1>
+</div>
+
+<%= form_tag empresas_path, :method => 'get', id: "search-form" do %>
+ <div class="field"> 
+
+ <%= label_tag "Estado:  " %>  
+ <%= select_tag(:estado, options_for_select([
+  ['Activas', 1], ['Inactivas', 2] 
+  ], selected: @estado )) %> 
+
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+
+  <%= submit_tag "Aplicar seleccion" %>
+  <br><br>
+</div>
+<% end %>
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Razon social</th>                                               
+        <th><div align="center">Bps</th>          
+        <th>Rubros</th>           
+        <th></th>
+        <th></th>       
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= content_tag_for(:tr, @empresas) do |empresa| %>
+        <td><%= empresa.razon_social %></td>                                              
+        <td><div align="center"><%= empresa.bps_digito %></td>          
+        <td><%= empresa.rubros %></td>        
+        <td><%= link_to 'Ver', empresa %></td>
+        <td><%= link_to 'Editar', edit_empresa_path(empresa) %></td>             
+      <% end %>
+    </tbody>
+  </table>
+</div>

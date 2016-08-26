@@ -1,0 +1,68 @@
+<div class="page-header">
+  <%= link_to choferes_path, :class => 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-list-alt"></span>
+    Atras
+  <% end %>
+  <%= link_to edit_chofer_path(@chofer), :class => 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-pencil"></span>
+    Editar
+  <% end %>
+  <h1>Chofer</h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>Nombres:</dt>
+  <dd><%= @chofer.nombres %></dd>
+
+  <dt>Apellidos:</dt>
+  <dd><%= @chofer.apellidos %></dd>
+
+  <dt>Apodo:</dt>
+  <dd><%= @chofer.apodo %></dd>
+
+  <dt>Ci numero:</dt>
+  <dd><%= @chofer.ci_numero %></dd>
+
+  <dt>Ci vencim:</dt>
+  <dd><%= @chofer.ci_vencim %></dd>
+
+  <dt>Lc numero:</dt>
+  <dd><%= @chofer.lc_numero %></dd>
+
+  <dt>Lc vencim:</dt>
+  <dd><%= @chofer.lc_vencim %></dd>
+
+  <dt>Cs numero:</dt>
+  <dd><%= @chofer.cs_numero %></dd>
+
+  <dt>Cs vencim:</dt>
+  <dd><%= @chofer.cs_vencim %></dd>
+
+  <dt>Fe nacim:</dt>
+  <dd><%= @chofer.fe_nacim %></dd>
+
+  <dt>Direccion:</dt>
+  <dd><%= @chofer.direccion %></dd>
+
+  <dt>Tel domic:</dt>
+  <dd><%= @chofer.tel_domic %></dd>
+
+  <dt>Tel celular:</dt>
+  <dd><%= @chofer.tel_celular %></dd>
+
+  <dt>Tel contacto:</dt>
+  <dd><%= @chofer.tel_contacto %></dd>
+
+  <dt>Mutualista:</dt>
+  <dd><%= @chofer.mutualista %></dd>
+
+  <dt>Emergencia:</dt>
+  <dd><%= @chofer.emergencia %></dd>
+
+  <dt>Observ:</dt>
+  <dd><%= @chofer.observ %></dd>
+
+  <dt>Is activo:</dt>
+  <dd><%= @chofer.is_activo %></dd>
+
+</dl>

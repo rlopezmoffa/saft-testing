@@ -1,0 +1,13 @@
+<div class="page-header">
+  <%= link_to choferes_path, :class => 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-list-alt"></span>
+    Atras
+  <% end %>
+  <%= link_to @chofer, :class => 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-info-sign"></span>
+    Visualizar
+  <% end %>
+  <h1>Edicion de chofer</h1>
+</div>
+
+<%= render 'form' %>

@@ -1,0 +1,62 @@
+<div class="page-header">
+  <%= link_to 'javascript:history.go(-1);', :class => 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-list-alt"></span>
+    Atras
+  <% end %>
+  <%= link_to edit_empresa_chofer_path(@empresa_chofer), :class => 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-pencil"></span>
+    Editar
+  <% end %>
+  <h3>Relacion Empresa/Chofer</h3>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>Empresa:</dt>
+  <dd><%= @empresa_chofer.empresa.razon_social %></dd>
+
+  <dt>Chofer:</dt>
+  <dd><%= @empresa_chofer.chofer.get_nombre_completo %></dd>
+
+  <dt>Estado:</dt>
+  <dd><%= @empresa_chofer.get_estado_alfa %></dd>
+
+  <dt>Fecha alta:</dt>
+  <dd><%= @empresa_chofer.get_fecha_alta_editada %></dd>
+
+  <dt>Fecha baja:</dt>
+  <dd><%= @empresa_chofer.get_fecha_baja_editada %></dd>
+
+  <dt>Turno:</dt>
+  <dd><%= @empresa_chofer.get_turno_alfa %></dd>
+
+  <dt>Hora entrada:</dt>
+  <dd><%= @empresa_chofer.hora_entrada %></dd>
+
+  <dt>Hora salida:</dt>
+  <dd><%= @empresa_chofer.hora_salida %></dd>
+
+  <dt>Descanso:</dt>
+  <dd><%= @empresa_chofer.descanso %></dd>
+
+  <dt>Fecha alta bps:</dt>
+  <dd><%= @empresa_chofer.get_fecha_alta_bps_editada %></dd>
+
+  <dt>Charla seguro:</dt>
+  <dd><%= @empresa_chofer.charla_seguro %></dd>
+
+  <dt>Carne seguro:</dt>
+  <dd><%= @empresa_chofer.carne_seguro %></dd>
+
+  <dt>Porc comision:</dt>
+  <dd><%= @empresa_chofer.porc_comision %></dd>
+
+  <dt>Porc aporte:</dt>
+  <dd><%= @empresa_chofer.porc_aporte %></dd>
+
+  <dt>Fijo aporte:</dt>
+  <dd><%= @empresa_chofer.fijo_aporte %></dd>
+
+  <dt>Observaciones:</dt>
+  <dd><%= @empresa_chofer.observaciones %></dd>
+
+</dl>

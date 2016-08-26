@@ -1,0 +1,27 @@
+<div class="page-header">
+  <%= link_to new_matricula_path, :class => 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-plus"></span>
+    Agregar Matricula
+  <% end %>
+  <h3>Matriculas</h3>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Codigo</th>
+        <th>Empresa</th>
+       
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= content_tag_for(:tr, @matriculas) do |matricula| %>
+        <td><%= matricula.codigo %></td>
+        <td><%= matricula.get_nombre_empresa %></td>       
+          
+      <% end %>
+    </tbody>
+  </table>
+</div>

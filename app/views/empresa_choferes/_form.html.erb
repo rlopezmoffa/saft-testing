@@ -1,0 +1,116 @@
+<%= form_for(@empresa_chofer, :html => { :class => "form-horizontal", :role => "form" }) do |f| %>
+  <% if @empresa_chofer.errors.any? %>
+    <div class="alert alert-danger alert-dismissable" role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      <h4><%= pluralize(@empresa_chofer.errors.count, "error") %> prohibited this empresa_chofer from being saved:</h4>
+
+      <ul>
+      <% @empresa_chofer.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :id_empresa, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.number_field :id_empresa, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :id_chofer, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.number_field :id_chofer, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :estado, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.number_field :estado, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :fecha_alta, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.date_select :fecha_alta, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :fecha_baja, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.date_select :fecha_baja, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :turno, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.number_field :turno, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :hora_entrada, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :hora_entrada, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :hora_salida, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :hora_salida, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :descanso, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :descanso, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :fecha_alta_bps, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.date_select :fecha_alta_bps, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :charla_seguro, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.check_box :charla_seguro, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :carne_seguro, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.check_box :carne_seguro, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :porc_comision, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :porc_comision, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :porc_aporte, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :porc_aporte, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :fijo_aporte, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :fijo_aporte, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :observaciones, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_area :observaciones, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <%= f.submit :class => "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

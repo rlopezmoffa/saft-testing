@@ -1,0 +1,128 @@
+<%= form_for(@chofer, :html => { :class => "form-horizontal", :role => "form" }) do |f| %>
+  <% if @chofer.errors.any? %>
+    <div class="alert alert-danger alert-dismissable" role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      <h4><%= pluralize(@chofer.errors.count, "error") %> prohibited this chofer from being saved:</h4>
+
+      <ul>
+      <% @chofer.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :nombres, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :nombres, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :apellidos, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :apellidos, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :apodo, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :apodo, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :ci_numero, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :ci_numero, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :ci_vencim, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.date_select :ci_vencim, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :lc_numero, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :lc_numero, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :lc_vencim, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.date_select :lc_vencim, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :cs_numero, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :cs_numero, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :cs_vencim, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.date_select :cs_vencim, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :fe_nacim, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.date_select :fe_nacim, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :direccion, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :direccion, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :tel_domic, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :tel_domic, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :tel_celular, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :tel_celular, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :tel_contacto, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :tel_contacto, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :mutualista, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :mutualista, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :emergencia, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :emergencia, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :observ, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_area :observ, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :is_activo, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.check_box :is_activo, :class => "form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <%= f.submit "Confirmar", :class => "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

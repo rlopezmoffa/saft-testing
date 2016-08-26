@@ -1,0 +1,55 @@
+<div class="page-header">
+  <%= link_to new_chofer_path, :class => 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-plus"></span>
+    Agregar Chofer
+  <% end %>
+  <h1>Choferes</h1>
+</div>
+
+<%= form_tag choferes_path, :method => 'get', id: "search-form" do %>
+ <div class="field"> 
+
+ <%= label_tag "Estado:  " %>  
+ <%= select_tag(:estado, options_for_select([
+  ['Activos', 1], ['Inactivos', 2] 
+  ], selected: @estado )) %> 
+
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+
+  <%= submit_tag "Aplicar seleccion" %>
+  <br><br>
+</div>
+<% end %>
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Nombres</th>
+        <th>Apellidos</th>           
+        <th>Cedula</th>           
+        <th>Libreta chofer</th>
+        <th>Apodo</th>            
+        <th>Telefono</th>
+        <th>Celular</th>                 
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= content_tag_for(:tr, @choferes) do |chofer| %>
+        <td><%= chofer.nombres %></td>
+        <td><%= chofer.apellidos %></td>           
+        <td><%= chofer.ci_numero %></td>           
+        <td><%= chofer.lc_numero %></td>
+        <td><%= chofer.apodo %></td>
+        <td><%= chofer.tel_domic %></td>
+        <td><%= chofer.tel_celular %></td>       
+          
+        <td><%= link_to 'Ver', chofer %></td>
+        <td><%= link_to 'Editar', edit_chofer_path(chofer) %></td>        
+      <% end %>
+    </tbody>
+  </table>
+</div>

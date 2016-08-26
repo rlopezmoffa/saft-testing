@@ -1,0 +1,13 @@
+<div class="page-header">
+  <%= link_to 'javascript:history.go(-1);', :class => 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-list-alt"></span>
+    Atras
+  <% end %>
+  <%= link_to @empresa_chofer, :class => 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-info-sign"></span>
+    Ver
+  <% end %>
+  <h3>Edicion de los datos del chofer para esta empresa</h>
+</div>
+
+<%= render 'form_edit' %>

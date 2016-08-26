@@ -1,0 +1,13 @@
+<div class="page-header">
+  <%= link_to empresas_path, :class => 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-list-alt"></span>
+    Atras
+  <% end %>
+  <%= link_to @empresa, :class => 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-info-sign"></span>
+    Ver
+  <% end %>
+  <h1>Empresa</h1>
+</div>
+
+<%= render 'form' %>
