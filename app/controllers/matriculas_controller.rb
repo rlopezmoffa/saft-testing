@@ -61,6 +61,19 @@ class MatriculasController < ApplicationController
     end
   end
 
+  def search
+    @matricula = Matricula.where(codigo: params[:codigo]).first
+    respond_to do |format|
+      format.json do
+        if @matricula.present?
+          render json: @matricula
+        else
+          head :not_found
+        end
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_matricula

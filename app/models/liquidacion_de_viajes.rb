@@ -95,6 +95,17 @@ class LiquidacionDeViajes < ActiveRecord::Base
     return lvp  
   end
 
+  def empresa_chofer
+    if self.chofer.present? && self.empresa.present?
+      EmpresaChofer.where(id_empresa: self.chofer.id, id_chofer: self.empresa.id).first
+    end
+  end
 
+  def fecha_registro_as_json
+    self.fecha_registro.present? ? self.fecha_registro.strftime("%Y-%m-%d") : nil
+  end
 
+  def as_json(options = {})
+    super options.merge(methods: :fecha_registro_as_json)
+  end
 end

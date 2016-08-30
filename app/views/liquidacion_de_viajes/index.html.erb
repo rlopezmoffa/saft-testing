@@ -1,0 +1,9 @@
+<h1>Liquidacion de Viajes</h1>
+<p>
+  <%= link_to 'Nuevo', new_liquidacion_de_viajes_path %>
+</p>
+<ul>
+  <% @liquidacion_de_viajes.each do |liquidacion_de_viaje| %>
+    <%= link_to liquidacion_de_viaje.id, edit_liquidacion_de_viajes_path(liquidacion_de_viaje) %>
+  <% end %>
+</ul>

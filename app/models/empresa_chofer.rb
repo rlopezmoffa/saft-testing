@@ -50,4 +50,8 @@ class EmpresaChofer < ActiveRecord::Base
 	  return "*** ERROR - Chofer inexistente ***"
 	end
 
+  def as_json(options = {})
+    super options.merge(include: :chofer)
+  end
+
 end

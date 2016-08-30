@@ -17,19 +17,23 @@ class Matricula < ActiveRecord::Base
   	  empresa = Empresa.find(self.empresa_id)
   	  return empresa.razon_social
   	rescue Exception => e
-  	  return ""	
+  	  return ""
   	end
   end
 
-  def get_vehiculo    
+  def get_vehiculo
     operaciones = MatriculaLog.where("matricula_id = ?", self.id).order('fecha DESC').limit(1)
     vehiculo = Vehiculo.find(operaciones[0].vehiculo_id)
 
     #return Vehiculo.find(80)
   end
 
-  def self.search1(search)  
-    where("codigo = ?", search)    
+  def self.search1(search)
+    where("codigo = ?", search)
   end
-  
+
+  def as_json(options = {})
+    super(options.merge(include: :empresa))
+  end
+
 end

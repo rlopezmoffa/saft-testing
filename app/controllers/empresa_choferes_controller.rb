@@ -67,6 +67,19 @@ class EmpresaChoferesController < ApplicationController
     end
   end
 
+  def search
+    @empresa_chofer = EmpresaChofer.joins(:chofer).where(choferes: {ci_numero: params[:cedula]}, empresa_chofer: {id_empresa: params[:id_empresa]}).first
+    respond_to do |format|
+      format.json do
+        if @empresa_chofer.present?
+          render json: @empresa_chofer
+        else
+          head :not_found
+        end
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_empresa_chofer
