@@ -252,7 +252,10 @@ class LiquidacionDeViajeForm extends React.Component {
   }
 
   initState() {
-    const state = {};
+    const state = {
+      chTurnosId: 1
+    };
+
     const { liquidacion_de_viaje, empresa, chofer, empresa_chofer } = this.props;
 
     if (liquidacion_de_viaje) {
