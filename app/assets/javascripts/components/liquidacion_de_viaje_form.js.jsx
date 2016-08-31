@@ -5,8 +5,8 @@ class LiquidacionDeViajeForm extends React.Component {
     this.initState();
 
     this.handleChange = this.handleChange.bind(this);
-    this.onMatriculaKeyPress = this.onMatriculaKeyPress.bind(this);
-    this.onCedulaKeyPress = this.onCedulaKeyPress.bind(this);
+    this.onMatriculaBlur = this.onMatriculaBlur.bind(this);
+    this.onCedulaBlur = this.onCedulaBlur.bind(this);
   }
 
   handleChange(event) {
@@ -15,40 +15,36 @@ class LiquidacionDeViajeForm extends React.Component {
     });
   }
 
-  onMatriculaKeyPress(event) {
-    if (event.key == 'Enter') {
-      this.searchMatricula();
-    }
-  }
-
-  searchMatricula() {
+  onMatriculaBlur(event) {
     const { matricula } = this.state;
+
     if (matricula.length > 0) {
+      const target = event.target;
+
       $.getJSON(`/matriculas/search.json?codigo=${matricula}`)
         .done((json) => {
           this.setState({empresa: json.empresa});
         })
         .fail(() => {
-          alert('No se encontró la empresa');
+          this.setState({empresa: null});
+          target.focus();
         });
     }
   }
 
-  onCedulaKeyPress(event) {
-    if (event.key == 'Enter') {
-      this.searchEmpresaChofer();
-    }
-  }
-
-  searchEmpresaChofer() {
+  onCedulaBlur(event) {
     const { cedula, empresa } = this.state;
+
     if (empresa && cedula.length > 0) {
+      const target = event.target;
+
       $.getJSON(`/empresa_choferes/search.json?id_empresa=${empresa.id}&cedula=${cedula}`)
         .done((json) => {
           this.setState({empresa_chofer: json});
         })
         .fail(() => {
-          alert('No se encontró el chofer');
+          this.setState({empresa_chofer: null});
+          target.focus();
         });
     }
   }
@@ -321,7 +317,7 @@ class LiquidacionDeViajeForm extends React.Component {
             <div className="row">
               <div className="col-sm-6 form-group">
                 <label>Matricula</label>
-                <input type="text" name="matricula" value={this.state.matricula} onChange={this.handleChange} onKeyPress={this.onMatriculaKeyPress} className="form-control" />
+                <input type="text" name="matricula" value={this.state.matricula} onChange={this.handleChange} onKeyPress={this.onMatriculaKeyPress} onBlur={this.onMatriculaBlur} className="form-control" />
               </div>
               <div className="col-sm-6 form-group">
                 <label>Fecha</label>
@@ -340,7 +336,7 @@ class LiquidacionDeViajeForm extends React.Component {
               <label>Cedula</label>
               <div className="row">
                 <div className="col-xs-5">
-                  <input type="text" name="cedula" value={this.state.cedula} onChange={this.handleChange} onKeyPress={this.onCedulaKeyPress} className="form-control" />
+                  <input type="text" name="cedula" value={this.state.cedula}  onChange={this.handleChange} onBlur={this.onCedulaBlur} className="form-control" />
                 </div>
                 <div className="col-xs-7">
                   <input type="text" value={choferName} disabled={true} className="form-control" />
