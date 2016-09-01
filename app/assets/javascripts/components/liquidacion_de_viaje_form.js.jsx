@@ -83,45 +83,46 @@ class LiquidacionDeViajeForm extends React.Component {
   getRecBaDiu() {
     const { baDiuDes } = this.state;
     const { tarifa } = this.props;
-    const parsedDes = Number(baDiuDes);
+    const parsedDes = Number(baDiuDes) || 0;
     const total = this.getTotalBaDiu();
 
-    return total ? (total - parsedDes) * tarifa.valor_ba_diu : '';
+    return total !== '' ? (total - parsedDes) * tarifa.valor_ba_diu : '';
   }
 
   getRecFiDiu() {
     const { fiDiuDes } = this.state;
     const { tarifa } = this.props;
-    const parsedDes = Number(fiDiuDes);
+    const parsedDes = Number(fiDiuDes) || 0;
     const total = this.getTotalFiDiu();
 
-    return total ? (total - parsedDes) * tarifa.valor_fi_diu : '';
+    return total !== '' ? (total - parsedDes) * tarifa.valor_fi_diu : '';
   }
 
   getRecBaNoc() {
     const { baNocDes } = this.state;
     const { tarifa } = this.props;
     const total = this.getTotalBaNoc();
-    const parsedDes = Number(baNocDes);
+    const parsedDes = Number(baNocDes) || 0;
 
-    return total ? (total - parsedDes) * tarifa.valor_ba_noc : '';
+    return total !== '' ? (total - parsedDes) * tarifa.valor_ba_noc : '';
   }
 
   getRecFiNoc() {
     const { fiNocDes } = this.state;
     const { tarifa } = this.props;
-    const parsedDes = Number(fiNocDes);
+    const parsedDes = Number(fiNocDes) || 0;
     const total = this.getTotalFiNoc();
 
-    return total ? (total - parsedDes) * tarifa.valor_fi_noc : '';
+    return total !== '' ? (total - parsedDes) * tarifa.valor_fi_noc : '';
   }
 
   getValorKmt() {
     const recaudado = this.getRecaudado();
     const totalKmt = this.getTotalKmt();
 
-    if (recaudado && totalKmt) {
-      return recaudado / totalKmt;
+    if (recaudado !== '' && totalKmt !== '') {
+      const valorKmt = recaudado / totalKmt;
+      return isNaN(valorKmt) ? 0 : (valorKmt).toFixed(2);
     } else {
       return '';
     }
@@ -129,13 +130,13 @@ class LiquidacionDeViajeForm extends React.Component {
 
   getRecaudado() {
     const { reOtrosMas, reOtrosMenos } = this.state;
-    const parsedReOtrosMas = parseInt(reOtrosMas);
-    const parsedReOtrosMenos = parseInt(reOtrosMenos);
+    const parsedReOtrosMas = Number(reOtrosMas) || 0;
+    const parsedReOtrosMenos = Number(reOtrosMenos) || 0;
     const recBaDiu = this.getRecBaDiu();
     const recFiDiu = this.getRecFiDiu();
     const recBaNoc = this.getRecBaNoc();
     const recFiNoc = this.getRecFiNoc();
-    if (!isNaN(parsedReOtrosMas) && !isNaN(parsedReOtrosMenos) && recBaDiu && recFiDiu && recBaNoc && recFiNoc) {
+    if (recBaDiu !== '' && recFiDiu !== '' && recBaNoc !== '' && recFiNoc !== '') {
       return recBaDiu + recFiDiu + recBaNoc + recFiNoc + parsedReOtrosMas - parsedReOtrosMenos;
     } else {
       return '';
@@ -145,7 +146,7 @@ class LiquidacionDeViajeForm extends React.Component {
   getSalario() {
     const { empresa_chofer } = this.state;
     const recaudado = this.getRecaudado();
-    if (recaudado && empresa_chofer) {
+    if (recaudado !== '' && empresa_chofer) {
       const comision = empresa_chofer.porc_comision;
       return recaudado * comision / 100;
     } else {
@@ -162,7 +163,7 @@ class LiquidacionDeViajeForm extends React.Component {
   getLiquido() {
     const recaudado = this.getRecaudado();
     const gastos = this.getGastos();
-    if (recaudado && gastos) {
+    if (recaudado !== '') {
       return recaudado - gastos;
     } else {
       return '';
@@ -172,8 +173,8 @@ class LiquidacionDeViajeForm extends React.Component {
   getSubtotal() {
     const liquido = this.getLiquido();
     const { aportes } = this.state;
-    const parsedAportes = parseInt(aportes);
-    if (!isNaN(parsedAportes) && liquido) {
+    const parsedAportes = Number(aportes) || 0;
+    if (liquido !== '') {
       return parsedAportes + liquido;
     } else {
       return '';
@@ -183,8 +184,8 @@ class LiquidacionDeViajeForm extends React.Component {
   getTotal() {
     const subtotal = this.getSubtotal();
     const { varios } = this.state;
-    const parsedVarios = parseInt(varios);
-    if (!isNaN(parsedVarios) && subtotal) {
+    const parsedVarios = Number(varios) || 0;
+    if (subtotal !== '') {
       return subtotal + parsedVarios;
     } else {
       return '';
@@ -253,7 +254,39 @@ class LiquidacionDeViajeForm extends React.Component {
 
   initState() {
     const state = {
-      chTurnosId: 1
+      matricula: '',
+      fechaRegistro: '',
+      cedula: '',
+      chTurnosId: 1,
+      veKmEnt: '',
+      veKmSal: '',
+      baDiuEnt: '',
+      baDiuSal: '',
+      fiDiuEnt: '',
+      fiDiuSal: '',
+      baNocEnt: '',
+      baNocSal: '',
+      fiNocEnt: '',
+      fiNocSal: '',
+      baDiuDes: '',
+      fiDiuDes: '',
+      baNocDes: '',
+      fiNocDes: '',
+      gaComplemento: '',
+      gaGasoil: '',
+      gaAceite: '',
+      gaGomeria: '',
+      gaLavado: '',
+      gaOtros1Valor: '',
+      gaOtros1Detalle: '',
+      gaOtros2Valor: '',
+      gaOtros2Detalle: '',
+      reOtrosMas: '',
+      reOtrosMenos: '',
+      aportes: '',
+      varios: '',
+      recaudacionDigitada: '',
+      observaciones: ''
     };
 
     const { liquidacion_de_viaje, empresa, chofer, empresa_chofer } = this.props;
@@ -523,13 +556,13 @@ class LiquidacionDeViajeForm extends React.Component {
               <div className="form-group">
                 <label className="col-sm-4 control-label">Otros (+)</label>
                 <div className="col-sm-8">
-                  <input type="text" name="reOtrosMas" value={this.state.reOtrosMas} onChange={this.handleChange} className="form-control"/>
+                  <input type="number" name="reOtrosMas" value={this.state.reOtrosMas} onChange={this.handleChange} className="form-control"/>
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-sm-4 control-label">Otros (-)</label>
                 <div className="col-sm-8">
-                  <input type="text" name="reOtrosMenos" value={this.state.reOtrosMenos} onChange={this.handleChange} className="form-control"/>
+                  <input type="number" name="reOtrosMenos" value={this.state.reOtrosMenos} onChange={this.handleChange} className="form-control"/>
                 </div>
               </div>
             </div>
@@ -557,7 +590,7 @@ class LiquidacionDeViajeForm extends React.Component {
             <div className="form-group">
               <label className="col-sm-4 control-label">Aportes</label>
               <div className="col-sm-8">
-                <input type="text" name="aportes" value={this.state.aportes} onChange={this.handleChange} className="form-control"/>
+                <input type="number" name="aportes" value={this.state.aportes} onChange={this.handleChange} className="form-control"/>
               </div>
             </div>
             <div className="form-group">
@@ -569,7 +602,7 @@ class LiquidacionDeViajeForm extends React.Component {
             <div className="form-group">
               <label className="col-sm-4 control-label">Varios</label>
               <div className="col-sm-8">
-                <input type="text" name="varios" value={this.state.varios} onChange={this.handleChange} className="form-control" />
+                <input type="number" name="varios" value={this.state.varios} onChange={this.handleChange} className="form-control" />
               </div>
             </div>
             <div className="form-group">
@@ -581,7 +614,7 @@ class LiquidacionDeViajeForm extends React.Component {
             <div className="form-group">
               <label className="col-sm-4 control-label">Rec. Boleta</label>
               <div className="col-sm-8">
-                <input type="text" name="recaudacionDigitada" value={this.state.recaudacionDigitada} onChange={this.handleChange} className="form-control"/>
+                <input type="number" name="recaudacionDigitada" value={this.state.recaudacionDigitada} onChange={this.handleChange} className="form-control"/>
               </div>
             </div>
           </div>
