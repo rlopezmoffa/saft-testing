@@ -10,5 +10,9 @@ Rails.application.routes.draw do
   resources :vehiculos
   resources :matriculas_log
   resources :tarifas
-  resources :liquidacion_de_viajes
+  resources :liquidacion_de_viajes do
+    get :last, on: :collection
+  end
+
+  root to: 'liquidacion_de_viajes#index'
 end

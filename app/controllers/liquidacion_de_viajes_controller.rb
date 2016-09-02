@@ -45,6 +45,16 @@ class LiquidacionDeViajesController < ApplicationController
     end
   end
 
+  def last
+    @last = LiquidacionDeViajes.get_ultimo_registro(params[:matricula])
+
+    if @last.present?
+      render json: @last
+    else
+      head :not_found
+    end
+  end
+
   def liquidacion_de_viaje_params
     params.require(:liquidacion_de_viaje).permit(:matricula, :fecha_registro, :id_empresa, :ve_km_ent, :ve_km_sal, :ch_choferes_id, :ch_turnos_id, :ch_porc_comis, :ba_diu_ent, :ba_diu_sal, :ba_diu_des, :ba_noc_ent, :ba_noc_sal, :ba_noc_des, :fi_diu_ent, :fi_diu_sal, :fi_diu_des, :fi_noc_ent, :fi_noc_sal, :fi_noc_des, :ga_salario_otros, :ga_gasoil, :ga_aceite, :ga_gomeria, :ga_lavado, :ga_otros1_valor, :ga_otros1_detalle, :ga_otros2_valor, :ga_otros2_detalle, :re_otros_mas, :re_otros_menos, :tot_aportes, :tot_varios, :recaudacion_digitada, :observ)
   end

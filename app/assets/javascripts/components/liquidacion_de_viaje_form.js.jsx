@@ -7,6 +7,10 @@ class LiquidacionDeViajeForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.onMatriculaBlur = this.onMatriculaBlur.bind(this);
     this.onCedulaBlur = this.onCedulaBlur.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.storeRef = this.storeRef.bind(this);
+
+    this.inputs = [];
   }
 
   handleChange(event) {
@@ -23,6 +27,7 @@ class LiquidacionDeViajeForm extends React.Component {
 
       $.getJSON(`/matriculas/search.json?codigo=${matricula}`)
         .done((json) => {
+          this.loadFromLastRecord();
           this.setState({empresa: json.empresa});
         })
         .fail(() => {
@@ -30,6 +35,46 @@ class LiquidacionDeViajeForm extends React.Component {
           target.focus();
         });
     }
+  }
+
+  loadFromLastRecord() {
+    const { liquidacion_de_viaje } = this.props;
+
+    if (liquidacion_de_viaje) {
+      return;
+    }
+
+    const { matricula } = this.state;
+
+    $.getJSON(`/liquidacion_de_viajes/last.json?matricula=${matricula}`)
+      .done((json) => {
+        const kmtsEntrada = json.ve_km_sal;
+        const banderasDiurnas = json.ba_diu_sal;
+        const banderasNocturnas = json.ba_noc_sal;
+
+        if (banderasDiurnas > banderasNocturnas) {
+          this.setState({
+            veKmEnt: kmtsEntrada,
+            baDiuEnt: json.ba_diu_sal,
+            fiDiuEnt: json.fi_diu_sal,
+            diuBloqued: true,
+            nocBloqued: false
+          });
+        } else {
+          this.setState({
+            veKmEnt: kmtsEntrada,
+            baNocEnt: json.ba_noc_sal,
+            fiNocEnt: json.fi_noc_sal,
+            diuBloqued: false,
+            nocBloqued: true
+          });
+        }
+      }).fail(() => {
+        this.setState({
+          diuBloqued: false,
+          nocBloqued: false
+        });
+      });
   }
 
   onCedulaBlur(event) {
@@ -47,6 +92,37 @@ class LiquidacionDeViajeForm extends React.Component {
           target.focus();
         });
     }
+  }
+
+  handleKeyPress(event) {
+    const target = event.target;
+
+    if (event.key == 'Enter') {
+      const length = this.inputs.length;
+      let index = this.inputs.indexOf(target);
+
+      if (index >= 0) {
+        if (index === length - 1) {
+          this.save();
+        } else {
+          let found = false;
+          let nextInput = null;
+
+          while (!found && index < (length - 1)) {
+            nextInput = this.inputs[++index];
+            found = !nextInput.disabled;
+          }
+
+          if (found) {
+            nextInput.focus();
+          }
+        }
+      }
+    }
+  }
+
+  storeRef(input) {
+    this.inputs.push(input);
   }
 
   getDifference(entry, exit) {
@@ -286,7 +362,9 @@ class LiquidacionDeViajeForm extends React.Component {
       aportes: '',
       varios: '',
       recaudacionDigitada: '',
-      observaciones: ''
+      observaciones: '',
+      diuBloqued: false,
+      nocBloqued: false
     };
 
     const { liquidacion_de_viaje, empresa, chofer, empresa_chofer } = this.props;
@@ -353,11 +431,11 @@ class LiquidacionDeViajeForm extends React.Component {
             <div className="row">
               <div className="col-sm-6 form-group">
                 <label>Matricula</label>
-                <input type="text" name="matricula" value={this.state.matricula} onChange={this.handleChange} onKeyPress={this.onMatriculaKeyPress} onBlur={this.onMatriculaBlur} className="form-control" />
+                <input type="text" name="matricula" value={this.state.matricula} onChange={this.handleChange}  onKeyPress={this.handleKeyPress} ref={this.storeRef} onBlur={this.onMatriculaBlur} className="form-control" />
               </div>
               <div className="col-sm-6 form-group">
                 <label>Fecha</label>
-                <input type="date" name="fechaRegistro" value={this.state.fechaRegistro} className="form-control" onChange={this.handleChange} />
+                <input type="date" name="fechaRegistro" value={this.state.fechaRegistro} className="form-control" onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} />
               </div>
             </div>
             <div className="row">
@@ -372,7 +450,7 @@ class LiquidacionDeViajeForm extends React.Component {
               <label>Cedula</label>
               <div className="row">
                 <div className="col-xs-5">
-                  <input type="text" name="cedula" value={this.state.cedula}  onChange={this.handleChange} onBlur={this.onCedulaBlur} className="form-control" />
+                  <input type="text" name="cedula" value={this.state.cedula} onChange={this.handleChange} onBlur={this.onCedulaBlur} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control" />
                 </div>
                 <div className="col-xs-7">
                   <input type="text" value={choferName} disabled={true} className="form-control" />
@@ -385,10 +463,10 @@ class LiquidacionDeViajeForm extends React.Component {
                   <label>Turno</label>
                   <div className="form-group">
                     <label className="radio-inline">
-                      <input type="radio" name="chTurnosId" onChange={this.handleChange} checked={this.state.chTurnosId == '1'} className="form-control" value="1"/> Diurno
+                      <input type="radio" name="chTurnosId" onChange={this.handleChange} checked={this.state.chTurnosId == '1'} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control" value="1"/> Diurno
                     </label>
                     <label className="radio-inline">
-                      <input type="radio" name="chTurnosId" onChange={this.handleChange} checked={this.state.chTurnosId == '2'} className="form-control" value="2"/> Nocturno
+                      <input type="radio" name="chTurnosId" onChange={this.handleChange} checked={this.state.chTurnosId == '2'} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control" value="2"/> Nocturno
                     </label>
                   </div>
                 </div>
@@ -427,20 +505,20 @@ class LiquidacionDeViajeForm extends React.Component {
             </tr>
             <tr>
               <th>Salida</th>
-              <td><input type="number" name="veKmSal" value={this.state.veKmSal} onChange={this.handleChange} className="form-control"/></td>
-              <td><input type="number" name="baDiuSal" value={this.state.baDiuSal} onChange={this.handleChange} className="form-control"/></td>
-              <td><input type="number" name="fiDiuSal" value={this.state.fiDiuSal} onChange={this.handleChange} className="form-control"/></td>
-              <td><input type="number" name="baNocSal" value={this.state.baNocSal} onChange={this.handleChange} className="form-control"/></td>
-              <td><input type="number" name="fiNocSal" value={this.state.fiNocSal} onChange={this.handleChange} className="form-control"/></td>
+              <td><input type="number" name="veKmSal" value={this.state.veKmSal} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/></td>
+              <td><input type="number" name="baDiuSal" value={this.state.baDiuSal} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/></td>
+              <td><input type="number" name="fiDiuSal" value={this.state.fiDiuSal} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/></td>
+              <td><input type="number" name="baNocSal" value={this.state.baNocSal} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/></td>
+              <td><input type="number" name="fiNocSal" value={this.state.fiNocSal} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/></td>
               <td></td>
             </tr>
             <tr>
               <th>Entrada</th>
-              <td><input type="number" name="veKmEnt" value={this.state.veKmEnt} onChange={this.handleChange} className="form-control"/></td>
-              <td><input type="number" name="baDiuEnt" value={this.state.baDiuEnt} onChange={this.handleChange} className="form-control"/></td>
-              <td><input type="number" name="fiDiuEnt" value={this.state.fiDiuEnt} onChange={this.handleChange} className="form-control"/></td>
-              <td><input type="number" name="baNocEnt" value={this.state.baNocEnt} onChange={this.handleChange} className="form-control"/></td>
-              <td><input type="number" name="fiNocEnt" value={this.state.fiNocEnt} onChange={this.handleChange} className="form-control"/></td>
+              <td><input type="number" name="veKmEnt" value={this.state.veKmEnt} onChange={this.handleChange} disabled={this.state.diuBloqued || this.state.nocBloqued} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/></td>
+              <td><input type="number" name="baDiuEnt" value={this.state.baDiuEnt} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} disabled={this.state.diuBloqued} className="form-control"/></td>
+              <td><input type="number" name="fiDiuEnt" value={this.state.fiDiuEnt} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} disabled={this.state.diuBloqued} className="form-control"/></td>
+              <td><input type="number" name="baNocEnt" value={this.state.baNocEnt} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} disabled={this.state.nocBloqued} className="form-control"/></td>
+              <td><input type="number" name="fiNocEnt" value={this.state.fiNocEnt} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} disabled={this.state.nocBloqued} className="form-control"/></td>
               <td><input type="text" value={this.getValorKmt()}className="form-control" disabled={true}/></td>
             </tr>
             <tr>
@@ -454,10 +532,10 @@ class LiquidacionDeViajeForm extends React.Component {
             </tr>
             <tr>
               <th colSpan="2">Descuento</th>
-              <td><input type="number" name="baDiuDes" value={this.state.baDiuDes} onChange={this.handleChange} className="form-control"/></td>
-              <td><input type="number" name="fiDiuDes" value={this.state.fiDiuDes} onChange={this.handleChange} className="form-control"/></td>
-              <td><input type="number" name="baNocDes" value={this.state.baNocDes} onChange={this.handleChange} className="form-control"/></td>
-              <td><input type="number" name="fiNocDes" value={this.state.fiNocDes} onChange={this.handleChange} className="form-control"/></td>
+              <td><input type="number" name="baDiuDes" value={this.state.baDiuDes} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/></td>
+              <td><input type="number" name="fiDiuDes" value={this.state.fiDiuDes} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/></td>
+              <td><input type="number" name="baNocDes" value={this.state.baNocDes} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/></td>
+              <td><input type="number" name="fiNocDes" value={this.state.fiNocDes} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/></td>
               <td></td>
             </tr>
           </tbody>
@@ -474,49 +552,49 @@ class LiquidacionDeViajeForm extends React.Component {
             <div className="form-group">
               <label className="col-sm-3 control-label">Complemento</label>
               <div className="col-sm-3">
-                <input type="number" name="gaComplemento" value={this.state.gaComplemento} onChange={this.handleChange} className="form-control"/>
+                <input type="number" name="gaComplemento" value={this.state.gaComplemento} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
               </div>
             </div>
             <div className="form-group">
               <label className="col-sm-3 control-label">Gas Oil</label>
               <div className="col-sm-3">
-                <input type="number" name="gaGasoil" value={this.state.gaGasoil} onChange={this.handleChange} className="form-control"/>
+                <input type="number" name="gaGasoil" value={this.state.gaGasoil} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
               </div>
             </div>
             <div className="form-group">
               <label className="col-sm-3 control-label">Aceite</label>
               <div className="col-sm-3">
-                <input type="number" name="gaAceite" value={this.state.gaAceite} onChange={this.handleChange} className="form-control"/>
+                <input type="number" name="gaAceite" value={this.state.gaAceite} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
               </div>
             </div>
             <div className="form-group">
               <label className="col-sm-3 control-label">Gomeria</label>
               <div className="col-sm-3">
-                <input type="number" name="gaGomeria" value={this.state.gaGomeria} onChange={this.handleChange} className="form-control"/>
+                <input type="number" name="gaGomeria" value={this.state.gaGomeria} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
               </div>
             </div>
             <div className="form-group">
               <label className="col-sm-3 control-label">Lavado</label>
               <div className="col-sm-3">
-                <input type="number" name="gaLavado" value={this.state.gaLavado} onChange={this.handleChange} className="form-control"/>
+                <input type="number" name="gaLavado" value={this.state.gaLavado} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
               </div>
             </div>
             <div className="form-group">
               <label className="col-sm-3 control-label">Otros (1)</label>
               <div className="col-sm-3">
-                <input type="number" name="gaOtros1Valor" value={this.state.gaOtros1Valor} onChange={this.handleChange} className="form-control"/>
+                <input type="number" name="gaOtros1Valor" value={this.state.gaOtros1Valor} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
               </div>
               <div className="col-sm-6">
-                <input type="text" name="gaOtros1Detalle" value={this.state.gaOtros1Detalle} onChange={this.handleChange} className="form-control"/>
+                <input type="text" name="gaOtros1Detalle" value={this.state.gaOtros1Detalle} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
               </div>
             </div>
             <div className="form-group">
               <label className="col-sm-3 control-label">Otros (2)</label>
               <div className="col-sm-3">
-                <input type="number" name="gaOtros2Valor" value={this.state.gaOtros2Valor} onChange={this.handleChange} className="form-control"/>
+                <input type="number" name="gaOtros2Valor" value={this.state.gaOtros2Valor} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
               </div>
               <div className="col-sm-6">
-                <input type="text" name="gaOtros2Detalle" value={this.state.gaOtros2Detalle} onChange={this.handleChange} className="form-control"/>
+                <input type="text" name="gaOtros2Detalle" value={this.state.gaOtros2Detalle} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
               </div>
             </div>
           </div>
@@ -556,13 +634,13 @@ class LiquidacionDeViajeForm extends React.Component {
               <div className="form-group">
                 <label className="col-sm-4 control-label">Otros (+)</label>
                 <div className="col-sm-8">
-                  <input type="number" name="reOtrosMas" value={this.state.reOtrosMas} onChange={this.handleChange} className="form-control"/>
+                  <input type="number" name="reOtrosMas" value={this.state.reOtrosMas} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-sm-4 control-label">Otros (-)</label>
                 <div className="col-sm-8">
-                  <input type="number" name="reOtrosMenos" value={this.state.reOtrosMenos} onChange={this.handleChange} className="form-control"/>
+                  <input type="number" name="reOtrosMenos" value={this.state.reOtrosMenos} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
                 </div>
               </div>
             </div>
@@ -590,7 +668,7 @@ class LiquidacionDeViajeForm extends React.Component {
             <div className="form-group">
               <label className="col-sm-4 control-label">Aportes</label>
               <div className="col-sm-8">
-                <input type="number" name="aportes" value={this.state.aportes} onChange={this.handleChange} className="form-control"/>
+                <input type="number" name="aportes" value={this.state.aportes} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
               </div>
             </div>
             <div className="form-group">
@@ -602,7 +680,7 @@ class LiquidacionDeViajeForm extends React.Component {
             <div className="form-group">
               <label className="col-sm-4 control-label">Varios</label>
               <div className="col-sm-8">
-                <input type="number" name="varios" value={this.state.varios} onChange={this.handleChange} className="form-control" />
+                <input type="number" name="varios" value={this.state.varios} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control" />
               </div>
             </div>
             <div className="form-group">
@@ -614,7 +692,7 @@ class LiquidacionDeViajeForm extends React.Component {
             <div className="form-group">
               <label className="col-sm-4 control-label">Rec. Boleta</label>
               <div className="col-sm-8">
-                <input type="number" name="recaudacionDigitada" value={this.state.recaudacionDigitada} onChange={this.handleChange} className="form-control"/>
+                <input type="number" name="recaudacionDigitada" value={this.state.recaudacionDigitada} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
               </div>
             </div>
           </div>
@@ -623,7 +701,7 @@ class LiquidacionDeViajeForm extends React.Component {
           <div className="col-md-12">
             <div className="form-group">
               <label className="control-label">Observaciones</label>
-              <input type="text" name="observaciones" value={this.state.observaciones} onChange={this.handleChange} className="form-control"/>
+              <input type="text" name="observaciones" value={this.state.observaciones} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} className="form-control"/>
             </div>
           </div>
         </div>
