@@ -16,5 +16,7 @@
 //= require bootstrap
 //= require react
 //= require react_ujs
+//= require moment
+//= require react-datetime
 //= require components
 //= require_tree .

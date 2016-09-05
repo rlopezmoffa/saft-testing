@@ -5,6 +5,7 @@ class LiquidacionDeViajeForm extends React.Component {
     this.initState();
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
     this.onMatriculaBlur = this.onMatriculaBlur.bind(this);
     this.onCedulaBlur = this.onCedulaBlur.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -115,6 +116,9 @@ class LiquidacionDeViajeForm extends React.Component {
 
           if (found) {
             nextInput.focus();
+            if (nextInput.name != 'fechaRegistro') {
+              this.dateTime.closeCalendar();
+            }
           }
         }
       }
@@ -126,8 +130,8 @@ class LiquidacionDeViajeForm extends React.Component {
   }
 
   getDifference(entry, exit) {
-    const parsedEntry = parseInt(entry);
-    const parsedExit = parseInt(exit);
+    const parsedEntry = Number(entry) || 0;
+    const parsedExit = Number(exit) || 0;
     return isNaN(parsedEntry) || isNaN(parsedExit) ? '' : parsedExit - parsedEntry;
   }
 
@@ -198,7 +202,13 @@ class LiquidacionDeViajeForm extends React.Component {
 
     if (recaudado !== '' && totalKmt !== '') {
       const valorKmt = recaudado / totalKmt;
-      return isNaN(valorKmt) ? 0 : (valorKmt).toFixed(2);
+      if (isNaN(valorKmt)) {
+        return 0;
+      } else if (isFinite(valorKmt)) {
+        return valorKmt.toFixed(2);
+      } else {
+        return '';
+      }
     } else {
       return '';
     }
@@ -233,7 +243,7 @@ class LiquidacionDeViajeForm extends React.Component {
   getGastos() {
     const { gaComplemento, gaGasoil, gaAceite, gaGomeria, gaLavado, gaOtros1Valor, gaOtros2Valor } = this.state;
     const gastos = [this.getSalario(), gaComplemento, gaGasoil, gaAceite, gaGomeria, gaLavado, gaOtros1Valor, gaOtros2Valor];
-    return gastos.map((x) => parseInt(x)).filter((x) => !isNaN(x)).reduce((x, r) => x + r, 0);
+    return gastos.map((x) => Number(x)).filter((x) => !isNaN(x)).reduce((x, r) => x + r, 0);
   }
 
   getLiquido() {
@@ -283,7 +293,7 @@ class LiquidacionDeViajeForm extends React.Component {
 
     const data = {
       matricula: state.matricula,
-      fecha_registro: state.fechaRegistro,
+      fecha_registro: state.fechaRegistro ? state.fechaRegistro.format('YYYY/MM/DD') : null,
       id_empresa: state.empresa ? state.empresa.id : null,
       ch_choferes_id: state.empresa_chofer ? state.empresa_chofer.chofer.id : null,
       ch_turnos_id: state.chTurnosId,
@@ -371,7 +381,7 @@ class LiquidacionDeViajeForm extends React.Component {
 
     if (liquidacion_de_viaje) {
       state.matricula = liquidacion_de_viaje.matricula;
-      state.fechaRegistro = liquidacion_de_viaje.fecha_registro_as_json;
+      state.fechaRegistro = liquidacion_de_viaje.fecha_registro_as_json ? moment(liquidacion_de_viaje.fecha_registro_as_json, 'YYYY/MM/DD') : '';
       state.chTurnosId = liquidacion_de_viaje.ch_turnos_id;
       state.veKmEnt = liquidacion_de_viaje.ve_km_ent;
       state.veKmSal = liquidacion_de_viaje.ve_km_sal;
@@ -415,6 +425,12 @@ class LiquidacionDeViajeForm extends React.Component {
     this.state = state;
   }
 
+  handleDateChange(date) {
+    this.setState({
+      fechaRegistro: date
+    });
+  }
+
   render() {
     const { tarifa } = this.props;
     const { empresa, empresa_chofer } = this.state;
@@ -435,7 +451,7 @@ class LiquidacionDeViajeForm extends React.Component {
               </div>
               <div className="col-sm-6 form-group">
                 <label>Fecha</label>
-                <input type="date" name="fechaRegistro" value={this.state.fechaRegistro} className="form-control" onChange={this.handleChange} onKeyPress={this.handleKeyPress} ref={this.storeRef} />
+                <Datetime value={this.state.fechaRegistro} ref={(x) => {this.dateTime = x}} onChange={this.handleDateChange} timeFormat={false} inputProps={{name: 'fechaRegistro', ref: this.storeRef, onKeyPress: this.handleKeyPress}} />
               </div>
             </div>
             <div className="row">
