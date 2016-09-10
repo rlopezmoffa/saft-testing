@@ -101,11 +101,11 @@ class LiquidacionDeViajes < ActiveRecord::Base
     end
   end
 
-  def fecha_registro_as_json
-    self.fecha_registro.present? ? self.fecha_registro.strftime("%Y-%m-%d") : nil
+  def co_fecha_as_json
+    self.co_fecha.present? ? self.co_fecha.strftime("%Y-%m-%d") : nil
   end
 
   def as_json(options = {})
-    super options.merge(methods: :fecha_registro_as_json)
+    super options.merge(methods: :co_fecha_as_json)
   end
 end

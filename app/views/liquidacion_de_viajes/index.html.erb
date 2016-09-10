@@ -4,6 +4,10 @@
 </p>
 <ul>
   <% @liquidacion_de_viajes.each do |liquidacion_de_viaje| %>
-    <%= link_to liquidacion_de_viaje.id, edit_liquidacion_de_viajes_path(liquidacion_de_viaje) %>
+    <li>
+      <%= liquidacion_de_viaje.id %>
+      <%= link_to 'Editar', edit_liquidacion_de_viajes_path(liquidacion_de_viaje) %>
+      <%= link_to 'Borrar', liquidacion_de_viaje, method: :delete, data: {confirm: 'Seguro?'} %>
+    </li>
   <% end %>
 </ul>

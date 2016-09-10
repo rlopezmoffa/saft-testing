@@ -116,7 +116,7 @@ class LiquidacionDeViajeForm extends React.Component {
 
           if (found) {
             nextInput.focus();
-            if (nextInput.name != 'fechaRegistro') {
+            if (nextInput.name != 'coFecha') {
               this.dateTime.closeCalendar();
             }
           }
@@ -293,7 +293,7 @@ class LiquidacionDeViajeForm extends React.Component {
 
     const data = {
       matricula: state.matricula,
-      fecha_registro: state.fechaRegistro ? state.fechaRegistro.format('YYYY/MM/DD') : null,
+      co_fecha: state.coFecha ? state.coFecha.format('YYYY/MM/DD') : null,
       id_empresa: state.empresa ? state.empresa.id : null,
       ch_choferes_id: state.empresa_chofer ? state.empresa_chofer.chofer.id : null,
       ch_turnos_id: state.chTurnosId,
@@ -341,7 +341,7 @@ class LiquidacionDeViajeForm extends React.Component {
   initState() {
     const state = {
       matricula: '',
-      fechaRegistro: '',
+      coFecha: moment(this.props.defaultDate, 'YYYY/MM/DD'),
       cedula: '',
       chTurnosId: 1,
       veKmEnt: '',
@@ -381,7 +381,9 @@ class LiquidacionDeViajeForm extends React.Component {
 
     if (liquidacion_de_viaje) {
       state.matricula = liquidacion_de_viaje.matricula;
-      state.fechaRegistro = liquidacion_de_viaje.fecha_registro_as_json ? moment(liquidacion_de_viaje.fecha_registro_as_json, 'YYYY/MM/DD') : '';
+      if (liquidacion_de_viaje.co_fecha_as_json) {
+        state.coFecha = moment(liquidacion_de_viaje.co_fecha_as_json, 'YYYY/MM/DD');
+      }
       state.chTurnosId = liquidacion_de_viaje.ch_turnos_id;
       state.veKmEnt = liquidacion_de_viaje.ve_km_ent;
       state.veKmSal = liquidacion_de_viaje.ve_km_sal;
@@ -427,7 +429,7 @@ class LiquidacionDeViajeForm extends React.Component {
 
   handleDateChange(date) {
     this.setState({
-      fechaRegistro: date
+      coFecha: date
     });
   }
 
@@ -451,7 +453,7 @@ class LiquidacionDeViajeForm extends React.Component {
               </div>
               <div className="col-sm-6 form-group">
                 <label>Fecha</label>
-                <Datetime value={this.state.fechaRegistro} ref={(x) => {this.dateTime = x}} onChange={this.handleDateChange} timeFormat={false} inputProps={{name: 'fechaRegistro', ref: this.storeRef, onKeyPress: this.handleKeyPress}} />
+                <Datetime value={this.state.coFecha} ref={(x) => {this.dateTime = x}} onChange={this.handleDateChange} timeFormat={false} inputProps={{name: 'coFecha', ref: this.storeRef, onKeyPress: this.handleKeyPress}} />
               </div>
             </div>
             <div className="row">
