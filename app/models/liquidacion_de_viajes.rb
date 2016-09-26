@@ -97,7 +97,7 @@ class LiquidacionDeViajes < ActiveRecord::Base
 
   def empresa_chofer
     if self.chofer.present? && self.empresa.present?
-      EmpresaChofer.where(id_empresa: self.chofer.id, id_chofer: self.empresa.id).first
+      EmpresaChofer.where(id_empresa: self.empresa.id, id_chofer: self.chofer.id).first
     end
   end
 
