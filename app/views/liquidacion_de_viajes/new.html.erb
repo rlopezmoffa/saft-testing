@@ -1,2 +1,6 @@
 <h1>Nueva Liquidacion de Viaje</h1>
-<%= react_component 'LiquidacionDeViajeForm', tarifa: @tarifa, defaultDate: @default_date %>
+<%= react_component 'LiquidacionDeViajeForm', {
+  tarifa: @tarifa,
+  defaultDate: @default_date,
+  defaultComision: @default_comision
+} %>

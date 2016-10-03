@@ -68,11 +68,14 @@ class EmpresaChoferesController < ApplicationController
   end
 
   def search
-    @empresa_chofer = EmpresaChofer.joins(:chofer).where(choferes: {ci_numero: params[:cedula]}, empresa_chofer: {id_empresa: params[:id_empresa]}).first
+    @chofer = Chofer.where(ci_numero: params[:cedula]).first
+    @empresa_chofer = @chofer.present? ? EmpresaChofer.where(id_empresa: params[:id_empresa], id_chofer: @chofer.id).first : nil
     respond_to do |format|
       format.json do
         if @empresa_chofer.present?
-          render json: @empresa_chofer
+          render json: {empresa_chofer: @empresa_chofer}
+        elsif @chofer.present?
+          render json: {chofer: @chofer}
         else
           head :not_found
         end

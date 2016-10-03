@@ -86,10 +86,10 @@ class LiquidacionDeViajeForm extends React.Component {
 
       $.getJSON(`/empresa_choferes/search.json?id_empresa=${empresa.id}&cedula=${cedula}`)
         .done((json) => {
-          this.setState({empresa_chofer: json});
+          this.setState({empresa_chofer: json.empresa_chofer, chofer: json.chofer});
         })
         .fail(() => {
-          this.setState({empresa_chofer: null});
+          this.setState({empresa_chofer: null, chofer: null});
           target.focus();
         });
     }
@@ -229,11 +229,34 @@ class LiquidacionDeViajeForm extends React.Component {
     }
   }
 
+  hasChofer() {
+    const { empresa_chofer, chofer } = this.state;
+    return empresa_chofer || chofer;
+  }
+
+  getChofer() {
+    const { empresa_chofer, chofer } = this.state;
+
+    if (empresa_chofer) {
+      return empresa_chofer.chofer;
+    } else {
+      return chofer;
+    }
+  }
+
+  getComision() {
+    if (this.hasChofer()) {
+      const { empresa_chofer } = this.state;
+      const { defaultComision } = this.props;
+      return empresa_chofer ? empresa_chofer.porc_comision : defaultComision;
+    }
+    return '';
+  }
+
   getSalario() {
-    const { empresa_chofer } = this.state;
     const recaudado = this.getRecaudado();
-    if (recaudado !== '' && empresa_chofer) {
-      const comision = empresa_chofer.porc_comision;
+    if (recaudado !== '' && this.hasChofer()) {
+      const comision = this.getComision();
       return recaudado * comision / 100;
     } else {
       return '';
@@ -291,11 +314,13 @@ class LiquidacionDeViajeForm extends React.Component {
       method = 'POST';
     }
 
+    const chofer = this.getChofer();
+
     const data = {
       matricula: state.matricula,
       co_fecha: state.coFecha ? state.coFecha.format('YYYY/MM/DD') : null,
       id_empresa: state.empresa ? state.empresa.id : null,
-      ch_choferes_id: state.empresa_chofer ? state.empresa_chofer.chofer.id : null,
+      ch_choferes_id: chofer ? chofer.id : null,
       ch_turnos_id: state.chTurnosId,
       ve_km_ent: state.veKmEnt,
       ve_km_sal: state.veKmSal,
@@ -420,6 +445,9 @@ class LiquidacionDeViajeForm extends React.Component {
       empresa_chofer.chofer = chofer;
       state.empresa_chofer = empresa_chofer;
       state.cedula = chofer.ci_numero;
+    } else if (chofer) {
+      state.chofer = chofer;
+      state.cedula = chofer.ci_numero;
     }
 
     state.empresa = empresa;
@@ -437,10 +465,10 @@ class LiquidacionDeViajeForm extends React.Component {
     const { tarifa } = this.props;
     const { empresa, empresa_chofer } = this.state;
 
-    const chofer = empresa_chofer ? empresa_chofer.chofer : null;
+    const chofer = this.getChofer();
     const razonSocial = empresa ? empresa.razon_social : '';
     const choferName = chofer ? `${chofer.nombres} ${chofer.apellidos}` : '';
-    const comision = empresa_chofer ? empresa_chofer.porc_comision : '';
+    const comision = this.getComision();
 
     return (
       <form className="">

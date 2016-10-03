@@ -1,5 +1,6 @@
 class LiquidacionDeViajesController < ApplicationController
   before_action :set_default_date, only: [:new, :edit]
+  before_action :set_default_comision, only: [:new, :edit]
 
   def index
     @liquidacion_de_viajes = LiquidacionDeViajes.all
@@ -69,5 +70,9 @@ class LiquidacionDeViajesController < ApplicationController
 
   def set_default_date
     @default_date = Time.now.strftime("%Y-%m-%d")
+  end
+
+  def set_default_comision
+    @default_comision = 27.0
   end
 end
