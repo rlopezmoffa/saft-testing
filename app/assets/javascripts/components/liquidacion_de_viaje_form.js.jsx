@@ -161,39 +161,35 @@ class LiquidacionDeViajeForm extends React.Component {
   }
 
   getRecBaDiu() {
-    const { baDiuDes } = this.state;
-    const { tarifa } = this.props;
+    const { baDiuDes, baDiuValor } = this.state;
     const parsedDes = Number(baDiuDes) || 0;
     const total = this.getTotalBaDiu();
 
-    return total !== '' ? (total - parsedDes) * tarifa.valor_ba_diu : '';
+    return total !== '' ? (total - parsedDes) * baDiuValor : '';
   }
 
   getRecFiDiu() {
-    const { fiDiuDes } = this.state;
-    const { tarifa } = this.props;
+    const { fiDiuDes, fiDiuValor } = this.state;
     const parsedDes = Number(fiDiuDes) || 0;
     const total = this.getTotalFiDiu();
 
-    return total !== '' ? (total - parsedDes) * tarifa.valor_fi_diu : '';
+    return total !== '' ? (total - parsedDes) * fiDiuValor : '';
   }
 
   getRecBaNoc() {
-    const { baNocDes } = this.state;
-    const { tarifa } = this.props;
+    const { baNocDes, baNocValor } = this.state;
     const total = this.getTotalBaNoc();
     const parsedDes = Number(baNocDes) || 0;
 
-    return total !== '' ? (total - parsedDes) * tarifa.valor_ba_noc : '';
+    return total !== '' ? (total - parsedDes) * baNocValor : '';
   }
 
   getRecFiNoc() {
-    const { fiNocDes } = this.state;
-    const { tarifa } = this.props;
+    const { fiNocDes, fiNocValor } = this.state;
     const parsedDes = Number(fiNocDes) || 0;
     const total = this.getTotalFiNoc();
 
-    return total !== '' ? (total - parsedDes) * tarifa.valor_fi_noc : '';
+    return total !== '' ? (total - parsedDes) * fiNocValor : '';
   }
 
   getValorKmt() {
@@ -326,12 +322,16 @@ class LiquidacionDeViajeForm extends React.Component {
       ve_km_sal: state.veKmSal,
       ba_diu_ent: state.baDiuEnt,
       ba_diu_sal: state.baDiuSal,
+      ba_diu_valor: state.baDiuValor,
       fi_diu_ent: state.fiDiuEnt,
       fi_diu_sal: state.fiDiuSal,
+      fi_diu_valor: state.fiDiuValor,
       ba_noc_ent: state.baNocEnt,
       ba_noc_sal: state.baNocSal,
+      ba_noc_valor: state.baNocValor,
       fi_noc_ent: state.fiNocEnt,
       fi_noc_sal: state.fiNocSal,
+      fi_noc_valor: state.fiNocValor,
       ba_diu_des: state.baDiuDes,
       fi_diu_des: state.fiDiuDes,
       ba_noc_des: state.baNocDes,
@@ -364,6 +364,8 @@ class LiquidacionDeViajeForm extends React.Component {
   }
 
   initState() {
+    const { tarifa } = this.props;
+
     const state = {
       matricula: '',
       coFecha: moment(this.props.defaultDate, 'YYYY/MM/DD'),
@@ -373,12 +375,16 @@ class LiquidacionDeViajeForm extends React.Component {
       veKmSal: '',
       baDiuEnt: '',
       baDiuSal: '',
+      baDiuValor: tarifa.valor_ba_diu,
       fiDiuEnt: '',
       fiDiuSal: '',
+      fiDiuValor: tarifa.valor_fi_diu,
       baNocEnt: '',
       baNocSal: '',
+      baNocValor: tarifa.valor_ba_noc,
       fiNocEnt: '',
       fiNocSal: '',
+      fiNocValor: tarifa.valor_fi_noc,
       baDiuDes: '',
       fiDiuDes: '',
       baNocDes: '',
@@ -439,6 +445,19 @@ class LiquidacionDeViajeForm extends React.Component {
       state.varios = liquidacion_de_viaje.tot_varios;
       state.recaudacionDigitada = liquidacion_de_viaje.recaudacion_digitada;
       state.observaciones = liquidacion_de_viaje.observ;
+
+      if (liquidacion_de_viaje.ba_diu_valor) {
+        state.baDiuValor = liquidacion_de_viaje.ba_diu_valor;
+      }
+      if (liquidacion_de_viaje.ba_noc_valor) {
+        state.baNocValor = liquidacion_de_viaje.ba_noc_valor;
+      }
+      if (liquidacion_de_viaje.fi_diu_valor) {
+        state.fiDiuValor = liquidacion_de_viaje.fi_diu_valor;
+      }
+      if (liquidacion_de_viaje.fi_noc_valor) {
+        state.fiNocValor = liquidacion_de_viaje.fi_noc_valor;
+      }
     }
 
     if (empresa_chofer) {
@@ -462,7 +481,6 @@ class LiquidacionDeViajeForm extends React.Component {
   }
 
   render() {
-    const { tarifa } = this.props;
     const { empresa, empresa_chofer } = this.state;
 
     const chofer = this.getChofer();
